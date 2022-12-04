@@ -1,64 +1,25 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import Navbar from "./components/Navbar";
-import Card from "./components/Card";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
-  const [moreBooks, setMoreBooks] = useState(true);
-  const [dataCat, setDataCat] = useState([]);
-  const [filterCat, setFilterCat] = useState("");
-  const [newCat, setNewCat] = useState([]);
-
-  const handleCat = async () => {
-    try {
-      axios.get("https://api.thecatapi.com/v1/breeds").then((res) => {
-        setDataCat(res.data);
-        // console.log(res);
-        // setMoreBooks(res.data.length > 0);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleFilter = (e) => {
-    // e.preventDefault();
-    if (filterCat === "") {
-      console.log(newCat);
-      return setNewCat(dataCat);
-    } else {
-      setNewCat(
-        dataCat?.filter((data) =>
-          data?.name.toLowerCase().includes(filterCat.toLowerCase())
-        )
-      );
-      console.log(newCat);
-    }
-  };
-
-  useEffect(() => {
-    handleCat();
-    console.log(newCat);
-  }, [newCat]);
-
-  useEffect(() => {
-    handleCat();
-  }, []);
-
   return (
-    <div className="flex flex-col">
-      <Navbar
-        setFilterCat={setFilterCat}
-        filterCat={filterCat}
-        handleFilter={handleFilter}
-      />
-      <Card
-        dataCat={newCat}
-        moreBooks={moreBooks}
-        handleFilter={handleFilter}
-        handleCat={handleCat}
-      />
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route
+            path="*"
+            element={
+              <h1 className="text-center mt-10 text-5xl font-bold">
+                Page Not Found
+              </h1>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
